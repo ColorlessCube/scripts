@@ -29,6 +29,7 @@ class ModelMixin:
         all_items = session.query(cls).all()
         for item in all_items:
             res.append(item.to_dict())
+        session.close()
         return res
 
     @classmethod
@@ -39,6 +40,7 @@ class ModelMixin:
             setattr(instance, key, value)
         session.add(instance)
         session.commit()
+        session.close()
 
     @classmethod
     def update(cls, data):
@@ -72,6 +74,7 @@ class Contents(Base, ModelMixin):
         session = Session()
         session.query(cls).filter(cls.cid == data.get('cid')).update(data)
         session.commit()
+        session.close()
 
 
 def get_md_path():
