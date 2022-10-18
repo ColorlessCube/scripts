@@ -7,6 +7,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Integer, String, Column, Float
 import os
 import re
+
+from logger import logger
 from utils import get_dict_mapping
 
 Session = sessionmaker(autocommit=False)
@@ -288,7 +290,7 @@ def _update_meta(meta_ls, db_content, meta_type):
                 })
                 db_meta['count'] += 1
                 Metas.update(db_meta)
-                print('Add ' + title + ' - ' + db_meta.get('name') + ' relation.')
+                logger.info('Add ' + title + ' - ' + db_meta.get('name') + ' relation.')
         else:
             meta_data = {
                 'name': meta,
@@ -300,12 +302,12 @@ def _update_meta(meta_ls, db_content, meta_type):
             db_meta = Metas.query_by_dict({
                 'name': meta
             })
-            print('Add ' + meta + ' meta.')
+            logger.info('Add ' + meta + ' meta.')
             Relationships.add({
                 'cid': cid,
                 'mid': db_meta.get('mid')
             })
-            print('Add ' + title + ' - ' + db_meta.get('name') + ' relation.')
+            logger.info('Add ' + title + ' - ' + db_meta.get('name') + ' relation.')
     # 删除
     relations = Relationships.query_by_dict({
         'cid': cid
@@ -316,7 +318,7 @@ def _update_meta(meta_ls, db_content, meta_type):
             Relationships.delete(relation)
             db_meta['count'] -= 1
             Metas.update(db_meta)
-            print('Delete ' + title + ' - ' + db_meta.get('name') + ' relation.')
+            logger.info('Delete ' + title + ' - ' + db_meta.get('name') + ' relation.')
 
 
 def update_content(db_content, local_content):
@@ -330,7 +332,7 @@ def update_content(db_content, local_content):
             db_content['text'] = local_text
             db_content['modified'] = time.time()
             Contents.update(db_content)
-            print('Update paper ' + local_title + '.')
+            logger.info('Update paper ' + local_title + '.')
     # 添加
     else:
         now = time.time()
@@ -357,7 +359,7 @@ def update_content(db_content, local_content):
         })
         db_content['slug'] = db_content.get('cid')
         Contents.update(db_content)
-        print('Add paper ' + local_title + '.')
+        logger.info('Add paper ' + local_title + '.')
     return None
 
 

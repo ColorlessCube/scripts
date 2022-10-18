@@ -8,8 +8,11 @@
 """
 
 
+
 def get_dict_mapping(dict_ls, key):
     res_dict = {}
     for item in dict_ls:
         res_dict[item.get(key)] = item
     return res_dict
+
+
